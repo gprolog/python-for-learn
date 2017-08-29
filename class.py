@@ -1,4 +1,4 @@
-#test for github
+#test for github 002
 class  people:
     name = ''
     age = 0
