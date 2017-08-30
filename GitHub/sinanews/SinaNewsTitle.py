@@ -5,7 +5,7 @@ import re
 import os
 from bs4 import BeautifulSoup
 
-#新浪新闻地址
+#新浪新闻地址，测试用
 url='http://news.sina.com.cn/china/'
 
 def getquip():
