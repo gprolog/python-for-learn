@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 #test for github 002
+=======
+#test for github
+>>>>>>> dce52eaab4c10fec8c80c92c96952f5b42f917b1
 class  people:
     name = ''
     age = 0

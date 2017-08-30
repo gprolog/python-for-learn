@@ -32,4 +32,4 @@ def login_query_10010(username,pwd):
     print('可用余额为:'+available_amount)
 
 if __name__=='__main__':
-    login_query_10010('18516292278','201212')
+    login_query_10010('186********','********')
