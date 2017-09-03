@@ -17,9 +17,7 @@ def getquip():
         
     #遍历每一个class=news-item的节点
         for news in soup.select('.phdnews_hdline'):
-            print('news'*10,news)
             h2=news.select('h3')
-            print('h2h2h2h2h2:',h2)
             #只选择长度大于2的结果
             if len(h2)>0:
                 #新闻时间

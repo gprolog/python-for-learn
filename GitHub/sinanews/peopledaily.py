@@ -1,29 +1,31 @@
-#get title of peple dayly
-#http://blog.csdn.net/jly58fgjk/article/details/51366524
 
-import requests
-import re
-from bs4 import BeautifulSoup
+#-*-coding=utf-8-*-
+'''
+参考 
+http://www.jianshu.com/p/2ae6d51522c3  
+http://www.cnblogs.com/xieqiankun/p/lxmlencoding.html 
+http://www.jianshu.com/p/288a92fc375a
+'''
 from lxml import etree
+import requests
+#要抓取内容的url地址
+url='http://www.people.com.cn'
+r=requests.get(url)
+#这里是 GB2312。所以，只需要制定 encoding = apparent_encoding
+r.encoding=r.apparent_encoding
+#r=r.text #text属性返回的是Unicode类型数据，主要用于文在
+#content属性返回的是二进制的数据，主要用于图片，在此处两者皆可
+r=r.text
+#使用etree.HTML()方法进行处理
+contentTree=etree.HTML(r)
+#通过xpath获取标题
+title = contentTree.xpath('.//*[@id="rmw_a"]/div/h2/a/text()')
+print (title)
 
-url='http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000'
-#header = {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko)'
-          #'Chrome/45.0.2454.101 Safari/537.36'}
-html=requests.get(url)
-html.encoding = 'UTF-8'
-soup=(html.text,'html.parser')
-page = re.findall('<li id=.*?>.*?<a href="(.*?)">.*?</a>',soup)     # 匹配不同目录后部分网址
-i = 0
+#抓取要闻 实证 快讯
+page=contentTree.xpath('.//*[@class="list14"]/li')
+#print('page',page)
 
-for each in page:
-    #print (each)
-    page1 ='http://www.liaoxuefeng.com'+each     #  不同目录前半部分+后半部分网址
-    html2 = requests.get(page1)
-    html2 = html2.text
-    i +=1
-
-for each2 in page1:
-        Selector = etree.HTML(html2)
-        content = Selector.xpath('//*[@class="x-wiki-content"]/p')   # 匹配汉字   是一个list
-        for each2 in content:
-            print (each2.text)
+for a in page:
+    tag_a=a.xpath('a/text()')
+    print(tag_a)
