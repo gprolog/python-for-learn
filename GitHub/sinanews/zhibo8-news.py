@@ -1,6 +1,7 @@
 #-*-coding:utf-8-*-
 import requests
 from lxml import etree
+import time
 '''
 #抓取直播吧中的新闻&比赛信息
 url='https://www.zhibo8.cc/'
@@ -50,12 +51,14 @@ for zhibo in saishi:
 #获取篮球论坛中的热门帖子
 #直播吧论坛中的帖子是异步加载的，解决办法参考下面信息
 #https://segmentfault.com/q/1010000008885973/a-1020000008888194
-
-url2='http://bbs.zhibo8.cc/list.html?fid=62&page=1/'
+#http://www.jianshu.com/p/da54149a0944
+url2='http://bbs.zhibo8.cc/topic.html?tid=2090352'
 luntan=requests.get(url2)
+#time.sleep(20)
 luntan1=luntan.content
 tiezi=etree.HTML(luntan1)
-tiezicontent=tiezi.xpath('html/body/div[2]/div[6]/table/tbody[1]/tr/td[1]/a[2]/text()')
+tiezicontent=tiezi.xpath('/html/body/div[2]/div[3]/h1/text()')
+#html/body/div[2]/div[6]/table/tbody[2]/tr[1]/td[1]/a[2]
 print('tiezicontent',tiezicontent)
 '''
 for title in tiezicontent:
