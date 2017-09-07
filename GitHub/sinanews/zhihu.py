@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 import os
 import time
 import re
-#从知乎抓取热门回答
+#从知乎抓取某一条热门回答
 #url='https://www.zhihu.com/question/64615364'
 url='https://www.zhihu.com/question/64766695/answer/224184206'
 '''
@@ -17,7 +17,7 @@ html=urllib.request.urlopen(url).read().decode('utf-8')
 page=etree.HTML(html)
 #print(page)
 '''
-'''
+
 #2、使用webdriver方法
 driver=webdriver.PhantomJS()
 driver.get(url)
@@ -25,16 +25,16 @@ driver.get(url)
 hottitle=driver.find_elements_by_xpath("//*[@class='RichText CopyrightRichText-richText']")
 for alltitle in hottitle:
     print(alltitle.text)
-'''
+
+
 #获取本页面上的图片
-#参考 http://www.cnblogs.com/shenckicc/p/6837409.html
-save_path='F:/download/'
+#参考 http://pmghong.blog.51cto.com/3221425/1334086/
+save_path='C:/download/zhihu/'
 html=str(urllib.request.urlopen(url).read())
-#time.sleep(30)
-#soup=BeautifulSoup(html.text,'html.parser')
-#img_urls=soup.findAll('img',class_="origin_image")
-img_re=re.compile(r'(?<=src=")>\s+?jpg')
+img_re=re.compile(r'src="(.*?\.jpg)"')
 img_list=img_re.findall(html)
 print('img_list',img_list)
 for i in range(len(img_list)):
-    urllib.request.urlretrieve(img_list[i],'s.jpg'%i)
+    urllib.request.urlretrieve(img_list[i],save_path+'%s.jpg'%i)
+print("picture download over")
+
