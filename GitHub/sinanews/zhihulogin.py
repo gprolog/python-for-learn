@@ -15,6 +15,8 @@ Update
 - date   : "2016.4.21"
 '''
 import requests
+from lxml import etree
+import time
 try:
     import cookielib
 except:
@@ -81,6 +83,7 @@ def isLogin():
     # 通过查看用户个人信息来判断是否已经登录
     url = "https://www.zhihu.com/settings/profile"
     login_code = session.get(url, headers=headers, allow_redirects=False).status_code
+
     if login_code == 200:
         return True
     else:
@@ -131,11 +134,27 @@ try:
     input = raw_input
 except:
     pass
-
+#获取登录后首页的内容
+def getpage():
+    pageurl='https://www.zhihu.com/'
+    url1 = 'https://www.zhihu.com/question/23069403/answer/230022889'
+    #使用url,cookies,headers获取首页内容
+    html=requests.get(pageurl,cookies=session.cookies,headers=headers).content.decode('utf-8')
+    #收到请求需要时间，延时
+    time.sleep(5)
+    page=etree.HTML(html)
+    #content=page.xpath(".//*[@id='root']/div/main/div/div/div[1]/div[2]/div/div/text()")
+    content = page.xpath('.//*[@class="content"]')
+    #print(content)
+    for title in content:
+        #alltitle=title.text
+        print('alltitle',title.text)
 
 if __name__ == '__main__':
     if isLogin():
         print('您已经登录')
+        getpage()
+
     else:
         account = input('请输入你的用户名\n>  ')
         secret = input("请输入你的密码\n>  ")
