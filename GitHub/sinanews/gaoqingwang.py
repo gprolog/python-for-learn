@@ -1,5 +1,5 @@
 #-*-coding:utf-8-*-
-#从高清网抓取首页的影片
+#从高清网抓取首页的影片信息
 import requests
 from lxml import etree
 import time

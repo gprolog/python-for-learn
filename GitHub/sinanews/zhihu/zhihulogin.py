@@ -17,6 +17,9 @@ Update
 import requests
 from lxml import etree
 import time
+from bs4 import BeautifulSoup
+import os
+import urllib
 try:
     import cookielib
 except:
@@ -142,13 +145,44 @@ def getpage():
     html=requests.get(pageurl,cookies=session.cookies,headers=headers).content.decode('utf-8')
     #收到请求需要时间，延时
     time.sleep(5)
+
     page=etree.HTML(html)
-    #content=page.xpath(".//*[@id='root']/div/main/div/div/div[1]/div[2]/div/div/text()")
-    content = page.xpath('.//*[@class="content"]')
+    content = page.xpath(".//*[@class='content']")
     #print(content)
     for title in content:
-        #alltitle=title.text
-        print('alltitle',title.text)
+        print('title',title.text)
+        #将获取的信息写入文件zhihu.txt
+        with open('zhihu.txt','w+') as f:
+            #print('open the zhihu.txt')
+            f.write(title.text[0])
+            f.close()
+    print('*'*10+'文件写入完成'+'*'*10)
+
+    #构建BeaautifulSoup对象
+    soup=BeautifulSoup(html,'html.parser')
+    #获取html中'img'标签的对应值
+    piccontent=soup.findAll('img')
+    #定义一个列表，存放图片的link
+    links=[]
+    print('*'*10+'获取图片并保存到本地'+'*'*10)
+    for piclink in piccontent:
+        #获取'img'中的src连接
+        pic=piclink.get('src')
+        #将图片链接添加到links列表中
+        links.append(pic.split(' ')[0])
+        print(links)
+        #判断目录是否存在，不存在的话创建目录
+        if not os.path.exists('zhihuphoto'):
+            os.makedirs('zhihuphoto')
+        i=1
+        for picnoe in links:
+            i+=1
+            #定义图片保存的目录+名称
+            picname='zhihuphoto\\'+str(i)+'.jpg'
+            with open(picname,'w'):
+                #将图片保存
+                urllib.request.urlretrieve(picnoe,picname)
+    print('pic保存完成，保存目录zhihuphoto,保存数量%d'%i)
 
 if __name__ == '__main__':
     if isLogin():
