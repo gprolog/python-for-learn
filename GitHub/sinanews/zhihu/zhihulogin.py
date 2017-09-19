@@ -142,19 +142,19 @@ def getpage():
     pageurl='https://www.zhihu.com/'
     url1 = 'https://www.zhihu.com/question/23069403/answer/230022889'
     #使用url,cookies,headers获取首页内容
-    html=requests.get(pageurl,cookies=session.cookies,headers=headers).content.decode('utf-8')
+    html=requests.get(pageurl,cookies=session.cookies,headers=headers).content
     #收到请求需要时间，延时
     time.sleep(5)
 
     page=etree.HTML(html)
-    content = page.xpath(".//*[@class='content']")
+    content = page.xpath(".//*[@class='content']/text()")
     #print(content)
     for title in content:
-        print('title',title.text)
+        print(title)
         #将获取的信息写入文件zhihu.txt
-        with open('zhihu.txt','w+') as f:
+        with open('zhihu.txt','w') as f:
             #print('open the zhihu.txt')
-            f.write(title.text[0])
+            f.write(str(title))
             f.close()
     print('*'*10+'文件写入完成'+'*'*10)
 
@@ -174,7 +174,7 @@ def getpage():
         #判断目录是否存在，不存在的话创建目录
         if not os.path.exists('zhihuphoto'):
             os.makedirs('zhihuphoto')
-        i=1
+        i=0
         for picnoe in links:
             i+=1
             #定义图片保存的目录+名称
@@ -187,9 +187,12 @@ def getpage():
 if __name__ == '__main__':
     if isLogin():
         print('您已经登录')
+        #获取登录后的首页内容
         getpage()
 
     else:
         account = input('请输入你的用户名\n>  ')
         secret = input("请输入你的密码\n>  ")
         login(secret, account)
+        # 获取登录后的首页内容
+        getpage()
